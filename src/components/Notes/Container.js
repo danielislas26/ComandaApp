@@ -1,10 +1,10 @@
-import React, { useState} from "react";
+import React, { useState,useEffect} from "react";
+import { Popup } from "./Popup";
 import { Text,ScrollView, View, StyleSheet,TextInput,Dimensions,TouchableOpacity} from "react-native";
-import { notaArray,cuenta } from "./Notas";
-import { SuperGridSectionList } from 'react-native-super-grid';
-import Nota from "./Notas";
 
-const rows = 3;
+
+
+const rows = 4;
 const cols = 2;
 const marginHorizontal = 4;
 const marginVertical = 4;
@@ -12,30 +12,105 @@ const width = (Dimensions.get('window').width / cols) - (marginHorizontal * (col
 const height = (Dimensions.get('window').height / rows) - (marginVertical * (rows + 1));
 
 
-console.log(cuenta)
 
-const Num = () => {
-    return notaArray.map((com,idx) => {
+
+const Num = ( datos,onIdSelect,selectedId ) => {
+
+    
+    const [data, setData] = useState([])
+    const [loading,setloading] = useState(true)
+
+    const [isPopupVisible, setPopupVisibility] = useState(false);
+    const [popupData, setPopupData] = useState('');
+    const [idData, setIdData] = useState('');
+    const [cuentaData, setCuentas] = useState('');
+    
+    const handleButtonClick = ( data) => {
+        
+        setPopupData(data);
+        setIdData(data._id.slice(-2));
+        setCuentas(data.Cuentas);
+        setPopupVisibility(true);
+        
+        
+      };
+
+    const handleClosePopup = () => {
+        setPopupVisibility(false);
+    };
+    
+    
+    const url = "http://192.168.1.192:8686/cuentas"
+
+    
+    useEffect(()=>{
+            fetch(url)
+            .then((response)=>response.json())
+            .then((json)=>setData(json))
+            .catch((error)=>console.error(error))
+            .finally(()=>setloading(false))
+        
+    },[])
+    
+
+    
+        const [pressCounts, setPressCounts] = useState({});
+        
+        
+        
+        const [pressedButton, setPressedButton] = useState(null);
+        const handlePress = (buttonId) => {
+            setPressedButton(buttonId)
+        };
+
+        const [lastTappedId, setLastTappedId] = useState(null);
+            
+            const handleButtonPress = (buttonId) => {
+                if(lastTappedId !== buttonId) {
+                    handlePress(buttonId._id)
+                    console.log(`enviar data: ${datos} a id: ${buttonId._id}`)
+                } else {
+                    handleButtonClick(buttonId)
+                }
+                setLastTappedId(buttonId);
+            };
+        
+            
         return(
-            <TouchableOpacity  key={idx} style={styles.button}><Text style={styles.text}>#{com.id}</Text></TouchableOpacity>
+            
+            <View style={styles.sectionContainer}>
+                {loading ? ( <Text>Loading....</Text>) : ( 
+                    
+                data.map((post,xid)=>(
+                
+               <TouchableOpacity  key={post._id} style={[styles.button, pressedButton === post._id && styles.buttonPressed]}  onPress={() => handleButtonPress(post)}><Text style={styles.text}>#{post._id.slice(-2)}</Text></TouchableOpacity>
+                    
+                         ))
+                    )}
+                <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData}></Popup>
+            </View>
         )
-    })
+
 }
 
 
-const Notas = () => {
+
+const Notas = ({datos, onIdSelect}) => {
 
     
     return(
     
         <ScrollView Style={styles.container}>
             <View style={styles.sectionContainer}>
-                <Num style={styles.col}></Num>
+            
+                <Num datos={datos} onIdSelect={onIdSelect}></Num>
             </View>
         </ScrollView>
-    
+        
     )
 }
+
+
 
 const styles = StyleSheet.create({
    
@@ -48,7 +123,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
         },
     button: {
@@ -61,7 +136,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'gold',
+        borderRadius: 5
 
+    },
+    buttonPressed: {
+        backgroundColor:'#e2b206'
     },
     text:{
         textAlign: 'center',
@@ -74,4 +153,4 @@ const styles = StyleSheet.create({
     
 })
 
-export default Notas;
+export { Notas, Num };

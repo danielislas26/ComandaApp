@@ -1,5 +1,6 @@
-import React, { useState} from "react";
-import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions} from "react-native";
+import React, { useState,useEffect} from "react";
+import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList} from "react-native";
+import { getItems, addItems, deleteItem } from '../../api'
 
 const rows = 3;
 const cols = 2;
@@ -9,9 +10,84 @@ const width = (Dimensions.get('window').width / cols) - (marginHorizontal * (col
 const height = (Dimensions.get('window').height / rows) - (marginVertical * (rows + 1));
 
 
-const Input = () => {
-    const [text, onChangeText] = React.useState('');
+const Input = ({ onInputChange }) => {
+    const [items, setItems] = useState([])
+    const [orders, setOrders] = useState('');
+    const [value, setValue] = useState('')
 
+
+    useEffect(() => {
+        fetchItems();
+    }, []);
+
+    const fetchItems = async () => {
+        const data = await getItems();
+        setItems(data)
+    };
+
+    const handleAddItem = async () => {
+        if ( orders && value) {
+            const newItem = { orders, value: Number(value) };
+            await addItems(newItem);
+            fetchItems();
+            setItems('');
+            setValue('')
+        }
+    };
+
+   
+
+/*    const [items, setItems] = useState([]);
+    const [name, setName ] = useState('');
+    const [value, setValue] = useState('')
+    
+    useEffect(() => {
+        fetchItems();
+    }, []);
+
+    const fetchItems = async () => {
+        const data = await getItems();
+        setItems(data);
+    };
+
+    const handleAddItem = async () => {
+        if (name && value) {
+            const newItem = { name, value: Number(value) };
+            await addItems(newItem);
+            fetchItems();
+            setName('')
+            setValue('')
+        }
+    };
+
+    const handleDeleteItem = async (id) => {
+        await deleteItem(id);
+        fetchItems();
+    };
+
+   */
+   // const [text, onChangeText] = React.useState('');
+    const [inputValue, setInputValue] = useState('');
+
+    const handleChange = (text) => {
+        if ( typeof onInputChange === 'function') {
+            onInputValue(text);
+            onInputChange(text)
+        } else {
+            console.error('onInputChange is not a function');
+        }
+        
+    };
+
+    const handleSubmit = async () => {
+        if (selectedId && inputValue) {
+            await updateItem(selectedId, { value: inputValue });
+            setInputValue('');
+            onInputChange('');
+        } else {
+            console.error('No ID selected or input value is empty');
+        }
+    };
     
         return (
             
@@ -20,15 +96,17 @@ const Input = () => {
             >
                <SafeAreaView style={styles.view}>
                    <TextInput
-                   style={styles.input}
+                    style={styles.input}
                     placeholder="platillos"
-                    onChangeText={onChangeText}
+                    value={inputValue}
+                    onChangeText={handleChange}
                     
-                    editable
-                    multiline
-                    value={text}
                    />
+                   <Button style={styles.button} title="Submit" onPress={handleSubmit}></Button>
                </SafeAreaView>
+               <View style={styles.container}>
+    
+    </View>
            </View>
         )
     }
@@ -59,6 +137,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         backgroundColor: '#FEF7BA',
+        
+    },
+
+    button:{
+        justifyContent: 'center',
+        width: '25%',
+        height: 50,
+        marginLeft :15,
+        backgroundColor: '#000000',
+        borderRadius: 5,
+        marginBottom: 15
         
     },
 });

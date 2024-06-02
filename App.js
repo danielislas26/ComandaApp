@@ -1,12 +1,14 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import  Input  from "./src/components/Input/InputField";
 import Button from "./src/components/Input/Button";
 import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import image from "./assets/spider.png";
-import Notas from "./src/components/Notes/Container";
+import {Notas,Num} from "./src/components/Notes/Container";
 import Tab from "./src/components/Tab";
+import { ParentComponent } from "./src/components/InputParentComponent";
 
 const App = () => {
+  
   return (
    /* <View style={styles.container}>
       <Text style={styles.title}>Hello World!!</Text>
@@ -21,10 +23,13 @@ const App = () => {
   <Text style={styles.buttonText}>Press Me</Text>
 </TouchableOpacity>
 </View>*/
+
 <View style={styles.container}>
-  <Input></Input>
+
+  
+  <ParentComponent></ParentComponent>
   <Button></Button>
-  <Notas></Notas>
+ 
   <Tab></Tab>
 </View>
 
@@ -50,6 +55,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize:20,
     
+  },
+  texto: {
+    color: '#000000'
   }
 });
 
