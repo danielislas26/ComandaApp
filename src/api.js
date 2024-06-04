@@ -7,7 +7,8 @@ export const getItems = async () => {
         const response = await axios.get(API_URL);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error(`Error fetching items:`, error);
+        throw error;
     }
 };
 
@@ -16,7 +17,22 @@ export const addItems = async (item) => {
         const response = await axios.post(API_URL, item);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error(`Error adding item:`, error);
+        throw error;
+    } 
+};
+
+export const updateItem = async (id, newCuenta) => {
+    try {
+        const url = `${API_URL}/${id}`;
+        console.log('URL:', url);
+        console.log('Update Data:', newCuenta);
+
+        const response = await axios.patch(url,{ newCuenta });
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating item:`, error );
+        throw error;
     }
 };
 
@@ -25,7 +41,8 @@ export const deleteItem = async (id) => {
         const response = await axios.delete(`${API_URL}/${id}`);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error(`Error deleting item`, error);
+        throw error;
     }
 };
 

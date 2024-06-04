@@ -1,6 +1,7 @@
 import React, { useState,useEffect} from "react";
 import { Popup } from "./Popup";
 import { Text,ScrollView, View, StyleSheet,TextInput,Dimensions,TouchableOpacity} from "react-native";
+import { getItems } from "../../api";
 
 
 
@@ -14,7 +15,7 @@ const height = (Dimensions.get('window').height / rows) - (marginVertical * (row
 
 
 
-const Num = ( datos,onIdSelect,selectedId ) => {
+const Num = ({ datos,onIdSelect,selectedId }) => {
 
     
     const [data, setData] = useState([])
@@ -25,13 +26,13 @@ const Num = ( datos,onIdSelect,selectedId ) => {
     const [idData, setIdData] = useState('');
     const [cuentaData, setCuentas] = useState('');
     
-    const handleButtonClick = ( data) => {
+    const handleButtonClick = ( data ) => {
         
         setPopupData(data);
         setIdData(data._id.slice(-2));
         setCuentas(data.Cuentas);
         setPopupVisibility(true);
-        
+       // onIdSelect(data._id);
         
       };
 
@@ -44,12 +45,24 @@ const Num = ( datos,onIdSelect,selectedId ) => {
 
     
     useEffect(()=>{
-            fetch(url)
+          /*  fetch(url)
             .then((response)=>response.json())
             .then((json)=>setData(json))
             .catch((error)=>console.error(error))
             .finally(()=>setloading(false))
-        
+        */
+       const fetchData = async () => {
+        try {
+            const items = await getItems();
+            setData(items);
+        } catch (error) {
+            console.error(`Error fetching items:`, error);
+        } finally {
+            setloading(false);
+        }
+       };
+
+       fetchData();
     },[])
     
 
@@ -67,8 +80,9 @@ const Num = ( datos,onIdSelect,selectedId ) => {
             
             const handleButtonPress = (buttonId) => {
                 if(lastTappedId !== buttonId) {
+                    
                     handlePress(buttonId._id)
-                    console.log(`enviar data: ${datos} a id: ${buttonId._id}`)
+                    onIdSelect(buttonId._id);
                 } else {
                     handleButtonClick(buttonId)
                 }
@@ -95,7 +109,7 @@ const Num = ( datos,onIdSelect,selectedId ) => {
 
 
 
-const Notas = ({datos, onIdSelect}) => {
+const Notas = ({datos, onIdSelect, selectedId}) => {
 
     
     return(
@@ -103,7 +117,7 @@ const Notas = ({datos, onIdSelect}) => {
         <ScrollView Style={styles.container}>
             <View style={styles.sectionContainer}>
             
-                <Num datos={datos} onIdSelect={onIdSelect}></Num>
+                <Num datos={datos} onIdSelect={onIdSelect} selectedId={selectedId}></Num>
             </View>
         </ScrollView>
         

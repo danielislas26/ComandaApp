@@ -21,7 +21,7 @@ const ParentComponent = () => {
 
     return (
         <View>
-            <Input onInputChange={handleInputChange} selectedId={selectedId}/>
+            <Input onInputChange={handleInputChange} selectedId={selectedId} />
             <Notas onIdSelect={handleIdSelect} datos={sharedData}  />
         </View>
     );

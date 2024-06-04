@@ -1,6 +1,7 @@
 import React, { useState,useEffect} from "react";
 import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList} from "react-native";
-import { getItems, addItems, deleteItem } from '../../api'
+import { getItems, addItems, deleteItem, updateItem } from '../../api'
+
 
 const rows = 3;
 const cols = 2;
@@ -10,7 +11,7 @@ const width = (Dimensions.get('window').width / cols) - (marginHorizontal * (col
 const height = (Dimensions.get('window').height / rows) - (marginVertical * (rows + 1));
 
 
-const Input = ({ onInputChange }) => {
+const Input = ({ onInputChange, selectedId }) => {
     const [items, setItems] = useState([])
     const [orders, setOrders] = useState('');
     const [value, setValue] = useState('')
@@ -71,7 +72,7 @@ const Input = ({ onInputChange }) => {
 
     const handleChange = (text) => {
         if ( typeof onInputChange === 'function') {
-            onInputValue(text);
+            setInputValue(text);
             onInputChange(text)
         } else {
             console.error('onInputChange is not a function');
@@ -81,9 +82,15 @@ const Input = ({ onInputChange }) => {
 
     const handleSubmit = async () => {
         if (selectedId && inputValue) {
-            await updateItem(selectedId, { value: inputValue });
+          try {  
+            await updateItem(selectedId, inputValue);
             setInputValue('');
             onInputChange('');
+
+          } catch (error) {
+            console.error(`Error updating item:`, error)
+          }
+        
         } else {
             console.error('No ID selected or input value is empty');
         }
