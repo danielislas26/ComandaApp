@@ -15,7 +15,7 @@ const height = (Dimensions.get('window').height / rows) - (marginVertical * (row
 
 
 
-const Num = ({ datos,onIdSelect,selectedId }) => {
+const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
 
     
     const [data, setData] = useState([])
@@ -93,14 +93,19 @@ const Num = ({ datos,onIdSelect,selectedId }) => {
         return(
             
             <View style={styles.sectionContainer}>
-                {loading ? ( <Text>Loading....</Text>) : ( 
-                    
-                data.map((post,xid)=>(
-                
-               <TouchableOpacity  key={post._id} style={[styles.button, pressedButton === post._id && styles.buttonPressed]}  onPress={() => handleButtonPress(post)}><Text style={styles.text}>#{post._id.slice(-2)}</Text></TouchableOpacity>
-                    
-                         ))
-                    )}
+                {datatofetch.length === 0 ? (
+                <Text>Loading....</Text>
+            ) : (
+                datatofetch.map((post) => (
+                    <TouchableOpacity
+                        key={post._id}
+                        style={[styles.button, pressedButton === post._id && styles.buttonPressed]}
+                        onPress={() => handleButtonPress(post)}
+                    >
+                        <Text style={styles.text}>#{post._id.slice(-2)}</Text>
+                    </TouchableOpacity>
+                ))
+            )}
                 <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData}></Popup>
             </View>
         )
@@ -109,15 +114,15 @@ const Num = ({ datos,onIdSelect,selectedId }) => {
 
 
 
-const Notas = ({datos, onIdSelect, selectedId}) => {
-
+const Notas = ({datos, onIdSelect, selectedId, datatofetch}) => {
+  
     
     return(
     
         <ScrollView Style={styles.container}>
             <View style={styles.sectionContainer}>
             
-                <Num datos={datos} onIdSelect={onIdSelect} selectedId={selectedId}></Num>
+                <Num datos={datos} onIdSelect={onIdSelect} selectedId={selectedId} datatofetch={datatofetch}></Num>
             </View>
         </ScrollView>
         

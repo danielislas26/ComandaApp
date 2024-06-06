@@ -11,20 +11,15 @@ const width = (Dimensions.get('window').width / cols) - (marginHorizontal * (col
 const height = (Dimensions.get('window').height / rows) - (marginVertical * (rows + 1));
 
 
-const Input = ({ onInputChange, selectedId }) => {
+const Input = ({ onInputChange, selectedId, fetchItems }) => {
     const [items, setItems] = useState([])
     const [orders, setOrders] = useState('');
     const [value, setValue] = useState('')
 
 
-    useEffect(() => {
-        fetchItems();
-    }, []);
+    
 
-    const fetchItems = async () => {
-        const data = await getItems();
-        setItems(data)
-    };
+
 
     const handleAddItem = async () => {
         if ( orders && value) {
@@ -86,7 +81,7 @@ const Input = ({ onInputChange, selectedId }) => {
             await updateItem(selectedId, inputValue);
             setInputValue('');
             onInputChange('');
-
+            fetchItems();
           } catch (error) {
             console.error(`Error updating item:`, error)
           }
