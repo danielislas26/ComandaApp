@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import { View,Text,StyleSheet,TouchableOpacity } from "react-native"
 import { menu } from "./platillos";
+import { Adder,Reducer } from "./Notes/AdderReducer";
 
 
 const total = (order) =>{
@@ -40,7 +41,7 @@ function TotalCalculator( input ) {
       return total ;
   };
 
-  const total = calculateTotal(input);
+  
   
 }
 
@@ -79,10 +80,8 @@ function OrderTotalCalculator( orders ) {
   );
 }
 
-function spliter  ( data ) {
+function spliter  ( data,wholId,pedidos ) {
   
-  
-
   const conteo = [
     { dish : 'tacos', quantity: 0 , totalPrice : 0 },
     { dish : 'kilos', quantity: 0 , totalPrice : 0 },
@@ -95,19 +94,21 @@ function spliter  ( data ) {
     { dish : 'jugos',  quantity: 0 , totalPrice : 0 },
   ];
 
+
+
  if ( data === "" ) {
   console.log("ok")
  } else {
-  const ordersToArray = data.flatMap(item => item.split(','));
+  const ordersToArray = data.flatMap(item => item.split(',')); // set an array with the strings split them by ','
   ordersToArray.forEach(order => {
-    const [quantity, food] = order.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
-    const menuItem = menu.find(menuItem => menuItem.foods.includes(food));
-
+    const [quantityInt, food] = order.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
+    const menuItem = menu.find(menuItem => menuItem.foods.includes(food)); // Creates the let menuItem and if it's find the food in the menu foods set the value
+    
     if (menuItem) {
         const index = conteo.findIndex(item => item.dish === menuItem.name);
         if (index !== -1) {
-            conteo[index].quantity += parseInt(quantity);
-            conteo[index].totalPrice += parseInt(quantity) * menuItem.price;
+            conteo[index].quantity += parseInt(quantityInt); 
+            conteo[index].totalPrice += parseInt(quantityInt) * menuItem.price;
         }
     }
 });
@@ -123,8 +124,8 @@ function spliter  ( data ) {
                       <View style={styles.BlockContainer}>
                           <View style={styles.priceContainer}><Text style={styles.price}>${item.totalPrice}</Text></View>
                           <View style={styles.BlockButtons}>
-                              <TouchableOpacity style={styles.Button}><Text style={styles.ButtonText} >-</Text></TouchableOpacity>
-                              <TouchableOpacity style={styles.Button}><Text style={styles.ButtonText} >+</Text></TouchableOpacity>
+                              <TouchableOpacity style={styles.Button} onPress={() => {Reducer(wholId,item.dish,pedidos); } }><Text style={styles.ButtonText} >-</Text></TouchableOpacity>
+                              <TouchableOpacity style={styles.Button} onPress={() => {Adder(wholId,item.dish,pedidos); } }><Text style={styles.ButtonText}>+</Text></TouchableOpacity>
                           </View>
                       </View>
                   </View>

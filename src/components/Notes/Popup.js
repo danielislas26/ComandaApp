@@ -4,64 +4,7 @@ import { notaArray } from "./Notas";
 import { total,TotalCalculator,OrderTotalCalculator,spliter } from "../Functions";
 import { menu } from "../platillos";
 
-const conteo = [
-    { plato: 'tacos', cantidad: 0 , total : 0 },
-    { plato: 'kilos', cantidad: 0 , total : 0 },
-    { plato: 'medios', cantidad: 0 , total : 0 },
-    { plato: 'cuartos', cantidad: 0 , total : 0 },
-    { plato: 'litros', cantidad: 0 , total : 0 },
-    { plato: 'mediolitro', cantidad: 0 , total : 0 },
-    { plato: 'cuartolitro', cantidad: 0 , total : 0 },
-    { plato: 'refresco', cantidad: 0 , total : 0 },
-    { plato: 'jugos',  cantidad: 0 , total : 0 },
-  ];
 
-
-
-let comida = menu.map((product) => {
-    console.log(product)
-})
-
-const Blocke =() => {
-    return notaArray.map((texto,idx)=>{
-        return(
-            <View>
-                <Text></Text>
-                <View>
-                    <Text></Text>
-                    <View>
-                        <TouchableOpacity><Text>-</Text></TouchableOpacity>
-                        <TouchableOpacity><Text>+</Text></TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        )
-    })
-}
-
-const Block =(Order) => {
-
-        return(
-            <View style={styles.Block}>
-                <View style={styles.PlatoContainer}>
-                <Text style={styles.Plato}>2</Text><Text style={styles.Plato}>Plato</Text>
-                </View>
-                <View style={styles.BlockContainer}>
-                    <View style={styles.priceContainer}><Text style={styles.price}>$50</Text></View>
-                    <View style={styles.BlockButtons}>
-                        <TouchableOpacity style={styles.Button}><Text style={styles.ButtonText} >-</Text></TouchableOpacity>
-                        <TouchableOpacity style={styles.Button}><Text style={styles.ButtonText} >+</Text></TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        )
-    
-}
-
-
-const encabezado =() => {
-    return notaArray
-}
 
 
 
@@ -86,7 +29,7 @@ const MyComponent = (data) => {
 
     };
 
-const Popup = ({isVisible, onClose, popupData,id,cuenta}) => {
+const Popup = ({isVisible, onClose, popupData,id,cuenta,wholId}) => {
   
     const cuentaArray = cuenta || [];
     
@@ -113,12 +56,11 @@ const Popup = ({isVisible, onClose, popupData,id,cuenta}) => {
                         <TouchableOpacity activeOpacity={1}>
                         <View style={styles.viewScroll}>
                           {cuentaArray.map((Renglon,idx)=>(
-                           MyComponent(Renglon),
 
                             <Text key={idx}>*{Renglon}</Text>
                           ))}
                           <ScrollView>
-                            {spliter(cuenta)}
+                            {spliter(cuenta,wholId,cuentaArray)}
                           </ScrollView>
                         </View>
                         </TouchableOpacity>
@@ -241,4 +183,4 @@ const styles = StyleSheet.create({
 
   });
 
-export {Popup,Block,MyComponent};
+export {Popup,MyComponent};

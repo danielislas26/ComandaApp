@@ -25,13 +25,14 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
     const [popupData, setPopupData] = useState('');
     const [idData, setIdData] = useState('');
     const [cuentaData, setCuentas] = useState('');
-    
+    const [wholId,setWholeId] = useState('')
     const handleButtonClick = ( data ) => {
         
         setPopupData(data);
         setIdData(data._id.slice(-2));
         setCuentas(data.Cuentas);
         setPopupVisibility(true);
+        setWholeId(data._id);
        // onIdSelect(data._id);
         
       };
@@ -106,7 +107,7 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
                     </TouchableOpacity>
                 ))
             )}
-                <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData}></Popup>
+                <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData} wholId={wholId}></Popup>
             </View>
         )
 
