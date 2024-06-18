@@ -17,9 +17,6 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
     const [value, setValue] = useState('')
 
 
-    
-
-
 
     const handleAddItem = async () => {
         if ( orders && value) {
@@ -31,38 +28,6 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
         }
     };
 
-   
-
-/*    const [items, setItems] = useState([]);
-    const [name, setName ] = useState('');
-    const [value, setValue] = useState('')
-    
-    useEffect(() => {
-        fetchItems();
-    }, []);
-
-    const fetchItems = async () => {
-        const data = await getItems();
-        setItems(data);
-    };
-
-    const handleAddItem = async () => {
-        if (name && value) {
-            const newItem = { name, value: Number(value) };
-            await addItems(newItem);
-            fetchItems();
-            setName('')
-            setValue('')
-        }
-    };
-
-    const handleDeleteItem = async (id) => {
-        await deleteItem(id);
-        fetchItems();
-    };
-
-   */
-   // const [text, onChangeText] = React.useState('');
     const [inputValue, setInputValue] = useState('');
 
     const handleChange = (text) => {

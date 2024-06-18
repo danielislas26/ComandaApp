@@ -33,7 +33,6 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
         setCuentas(data.Cuentas);
         setPopupVisibility(true);
         setWholeId(data._id);
-       // onIdSelect(data._id);
         
       };
 
@@ -41,17 +40,10 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
         setPopupVisibility(false);
     };
     
-    
     const url = "http://192.168.1.192:8686/cuentas"
 
-    
     useEffect(()=>{
-          /*  fetch(url)
-            .then((response)=>response.json())
-            .then((json)=>setData(json))
-            .catch((error)=>console.error(error))
-            .finally(()=>setloading(false))
-        */
+          
        const fetchData = async () => {
         try {
             const items = await getItems();
@@ -66,12 +58,6 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
        fetchData();
     },[])
     
-
-    
-        const [pressCounts, setPressCounts] = useState({});
-        
-        
-        
         const [pressedButton, setPressedButton] = useState(null);
         const handlePress = (buttonId) => {
             setPressedButton(buttonId)

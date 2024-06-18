@@ -1,10 +1,6 @@
 import React, { useState,useEffect} from "react";
 import { Text,SafeAreaView, View, StyleSheet,ScrollView, TouchableOpacity,TouchableWithoutFeedback,Modal} from "react-native";
-import { notaArray } from "./Notas";
 import { total,TotalCalculator,OrderTotalCalculator,spliter } from "../Functions";
-import { menu } from "../platillos";
-
-
 
 
 
@@ -81,13 +77,6 @@ const Popup = ({isVisible, onClose, popupData,id,cuenta,wholId}) => {
 const styles = StyleSheet.create({
     popupBackground:{
         flex: 1, justifyContent: 'center', alignItems: 'center' 
-     /*   position: 'absolute',
-       alignItems: "center",
-       justifyContent: 'flex-start',
-       paddingTop: 80,
-        width:'100%',
-        height: '100%',
-        backgroundColor: 'rgba(52, 52, 52, 0.8)'*/
     },
     PopupContainer:{
         width: '85%',

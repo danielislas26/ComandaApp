@@ -17,6 +17,7 @@ const Adder = ( cuentaId,dish, cuentaArray) => {
   }
   Arr = Arr.filter(order => order.trim() !== "");
   console.log(Arr)
+  return Arr
 };
 
 const Reducer = ( cuentaId,dish, cuentaArray) => {
