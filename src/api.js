@@ -47,3 +47,13 @@ export const deleteItem = async (id) => {
 };
 
 
+export const updateCuenta = async (id, newCuenta,) => {
+    try {
+        const response = await axios.put(`${API_URL}/${id}`,{ cuentas: newCuenta });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating cuenta:',error);
+        throw error;
+    }
+};
+

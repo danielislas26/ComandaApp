@@ -2,7 +2,8 @@ import React,{useState,useEffect} from "react";
 import { View,Text,StyleSheet,TouchableOpacity, YellowBox } from "react-native"
 import { menu } from "./platillos";
 import { Adder,Reducer } from "./Notes/AdderReducer";
-
+import { updateCuenta, updateItem } from "../api";
+import axios from "axios";
 
 const total = (order) =>{
     
@@ -41,7 +42,7 @@ function TotalCalculator( input ) {
 
 }
 
-function OrderTotalCalculator( orders,wholId ) {
+function OrderTotalCalculator( orders,wholId,fetchItems ) {
   let arr = [];
   for (let key in orders ) {
     arr.push(orders[key])
@@ -69,19 +70,37 @@ function OrderTotalCalculator( orders,wholId ) {
   
   }
 
-  const UpdateCuenta =(modifiedCuenta,id) => {
-    console.log(id,modifiedCuenta)
+/*const handleButtonClick = async () => {
+  try {
+    await updateCuenta(wholId, newCuenta);
+    console.log('Updated successfully')
+  } catch (error) {
+    console.error('Error updating:', error);
   }
+}*/
+
+const handleUpdateButtonClick = async () => {
+  try {
+    await updateCuenta(wholId, orders,fetchItems);
+    console.log('Updated successfully');
+  } catch (error) {
+    console.error('Error updating:', error);
+  }
+}
+
+ /* const UpdateCuenta =(modifiedCuenta,id) => {
+    console.log(id,modifiedCuenta)
+  }*/
   
   return (
     <View style={styles.TotalButtonContainer}>
       <Text style={styles.TotalText}>{totalCost}</Text>
-      <TouchableOpacity style={styles.UpdateButton} onPress={()=> { UpdateCuenta(orders,wholId) }}><Text style={styles.TextButton}>update</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.UpdateButton} onPress={handleUpdateButtonClick}><Text style={styles.TextButton}>update</Text></TouchableOpacity>
     </View>
   );
 }
 
-function spliter(data, wholId, cuentaArray, setCuentaArray) {
+function spliter(data, wholId, cuentaArray, setCuentaArray, fetchItems) {
   const conteo = [
     { dish: 'tacos', quantity: 0, totalPrice: 0 },
     { dish: 'kilos', quantity: 0, totalPrice: 0 },
@@ -110,6 +129,8 @@ function spliter(data, wholId, cuentaArray, setCuentaArray) {
         }
       }
     });
+
+    
 
     return (
       <View>
