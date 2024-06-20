@@ -25,55 +25,54 @@ const MyComponent = (data) => {
 
     };
 
-const Popup = ({isVisible, onClose, popupData,id,cuenta,wholId}) => {
-  
-    const cuentaArray = cuenta || [];
-    
-
-    return(
-    <Modal
-    animationType="fade"
-    transparent={true}
-    visible={isVisible}
-    onRequestClose={() => onClose()}
-    >
-    
-        <TouchableOpacity 
-        style={styles.background}
-        activeOpacity={1}
-        onPress={()=> onClose()}
-        >
-            <TouchableWithoutFeedback>
+    const Popup = ({ isVisible, onClose, popupData, id, cuenta, wholId }) => {
+        const [cuentaArray, setCuentaArray] = useState(cuenta || []);
+      
+        useEffect(() => {
+          setCuentaArray(cuenta || []);
+        }, [cuenta]);
+      
+        return (
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isVisible}
+            onRequestClose={() => onClose()}
+          >
+            <TouchableOpacity 
+              style={styles.background}
+              activeOpacity={1}
+              onPress={() => onClose()}
+            >
+              <TouchableWithoutFeedback>
                 <View style={styles.PopupContainer}>
-                    <View style={styles.encabezadoContainer}>
-                        <Text style={styles.titulo}>Cuenta #{id}</Text>
-                    </View>
-                    <ScrollView style={styles.Scroll}>
-                        <TouchableOpacity activeOpacity={1}>
-                        <View style={styles.viewScroll}>
-                          {cuentaArray.map((Renglon,idx)=>(
-
-                            <Text key={idx}>*{Renglon}</Text>
-                          ))}
-                          <ScrollView>
-                            {spliter(cuenta,wholId,cuentaArray)}
-                          </ScrollView>
-                        </View>
-                        </TouchableOpacity>
-                    </ScrollView>
-                    <View style={styles.TotalContainer}>
-                        <Text style={styles.TotalText}>Total </Text>
-                        <Text style={styles.TotalText}>$</Text>
-                        {OrderTotalCalculator(cuenta)}
-                    </View>
+                  <View style={styles.encabezadoContainer}>
+                    <Text style={styles.titulo}>Cuenta #{id}</Text>
+                  </View>
+                  <ScrollView style={styles.Scroll}>
+                    <TouchableOpacity activeOpacity={1}>
+                      <View style={styles.viewScroll}>
+                        {cuentaArray.map((Renglon, idx) => (
+                          <Text key={idx}>*{Renglon}</Text>
+                        ))}
+                        <ScrollView>
+                          {spliter(cuentaArray, wholId, cuentaArray, setCuentaArray)}
+                        </ScrollView>
+                      </View>
+                    </TouchableOpacity>
+                  </ScrollView>
+                  <View style={styles.TotalContainer}>
+                    <Text style={styles.TotalText}>Total </Text>
+                    <Text style={styles.TotalText}>$</Text>
+                    {OrderTotalCalculator(cuentaArray,wholId)}
+                  </View>
                 </View>
-            </TouchableWithoutFeedback>
-        </TouchableOpacity>
-    </Modal>
-   
-    )
-};
-
+              </TouchableWithoutFeedback>
+            </TouchableOpacity>
+          </Modal>
+        );
+      };
+      
 const styles = StyleSheet.create({
     popupBackground:{
         flex: 1, justifyContent: 'center', alignItems: 'center' 
