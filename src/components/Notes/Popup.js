@@ -25,7 +25,7 @@ const MyComponent = (data) => {
 
     };
 
-    const Popup = ({ isVisible, onClose, popupData, id, cuenta, wholId }) => {
+    const Popup = ({ isVisible, onClose, popupData, id, cuenta, wholId,fetchItems }) => {
         const [cuentaArray, setCuentaArray] = useState(cuenta || []);
       
         useEffect(() => {
@@ -56,7 +56,7 @@ const MyComponent = (data) => {
                           <Text key={idx}>*{Renglon}</Text>
                         ))}
                         <ScrollView>
-                          {spliter(cuentaArray, wholId, cuentaArray, setCuentaArray)}
+                          {spliter(cuentaArray, wholId, cuentaArray, setCuentaArray,fetchItems)}
                         </ScrollView>
                       </View>
                     </TouchableOpacity>
@@ -64,7 +64,7 @@ const MyComponent = (data) => {
                   <View style={styles.TotalContainer}>
                     <Text style={styles.TotalText}>Total </Text>
                     <Text style={styles.TotalText}>$</Text>
-                    {OrderTotalCalculator(cuentaArray,wholId)}
+                    {OrderTotalCalculator(cuentaArray,wholId,fetchItems)}
                   </View>
                 </View>
               </TouchableWithoutFeedback>

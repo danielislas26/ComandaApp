@@ -47,9 +47,10 @@ export const deleteItem = async (id) => {
 };
 
 
-export const updateCuenta = async (id, newCuenta,) => {
+export const updateCuenta = async (id, newCuenta, fetchItems) => {
     try {
         const response = await axios.put(`${API_URL}/${id}`,{ cuentas: newCuenta });
+        await fetchItems();
         return response.data;
     } catch (error) {
         console.error('Error updating cuenta:',error);

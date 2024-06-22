@@ -15,7 +15,7 @@ const height = (Dimensions.get('window').height / rows) - (marginVertical * (row
 
 
 
-const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
+const Num = ({ datos,onIdSelect,selectedId,datatofetch,fetchItems}) => {
 
     
     const [data, setData] = useState([])
@@ -93,7 +93,7 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
                     </TouchableOpacity>
                 ))
             )}
-                <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData} wholId={wholId}></Popup>
+                <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData} wholId={wholId} fetchItems={fetchItems}></Popup>
             </View>
         )
 
@@ -101,7 +101,7 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch}) => {
 
 
 
-const Notas = ({datos, onIdSelect, selectedId, datatofetch}) => {
+const Notas = ({datos, onIdSelect, selectedId, datatofetch, fetchItems}) => {
   
     
     return(
@@ -109,7 +109,7 @@ const Notas = ({datos, onIdSelect, selectedId, datatofetch}) => {
         <ScrollView Style={styles.container}>
             <View style={styles.sectionContainer}>
             
-                <Num datos={datos} onIdSelect={onIdSelect} selectedId={selectedId} datatofetch={datatofetch}></Num>
+                <Num datos={datos} onIdSelect={onIdSelect} selectedId={selectedId} datatofetch={datatofetch} fetchItems={fetchItems}></Num>
             </View>
         </ScrollView>
         
