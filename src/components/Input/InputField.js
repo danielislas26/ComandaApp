@@ -1,6 +1,6 @@
 import React, { useState,useEffect} from "react";
 import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList} from "react-native";
-import { getItems, addItems, deleteItem, updateItem } from '../../api'
+import { addItems, updateItem,createItem } from '../../api'
 
 
 const rows = 3;
@@ -41,9 +41,13 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
     };
 
     const handleSubmit = async () => {
-        if (selectedId && inputValue) {
+        if (inputValue) {
           try {  
-            await updateItem(selectedId, inputValue);
+            if (selectedId) {
+                await updateItem(selectedId,inputValue);
+            } else {
+                await createItem(inputValue);
+            }
             setInputValue('');
             onInputChange('');
             fetchItems();
@@ -52,7 +56,7 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
           }
         
         } else {
-            console.error('No ID selected or input value is empty');
+            console.error('input value is empty');
         }
     };
     

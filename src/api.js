@@ -58,3 +58,9 @@ export const updateCuenta = async (id, newCuenta, fetchItems) => {
     }
 };
 
+export const createItem = async (value) => {
+    const newDocument = { Cuentas: [value] };
+    const response = await axios.post(API_URL, newDocument);
+    return response.data;
+};
+

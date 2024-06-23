@@ -1,7 +1,7 @@
 import React, { useState,useEffect} from "react";
 import { Popup } from "./Popup";
-import { Text,ScrollView, View, StyleSheet,TextInput,Dimensions,TouchableOpacity} from "react-native";
-import { getItems } from "../../api";
+import { Text,ScrollView, View, StyleSheet,TextInput,Dimensions,TouchableOpacity, Keyboard, TouchableWithoutFeedback,Alert} from "react-native";
+import { getItems,deleteItem } from "../../api";
 
 
 
@@ -76,9 +76,43 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch,fetchItems}) => {
                 setLastTappedId(buttonId);
             };
         
+        const handleOutsidePress = () => {
+            
+            setLastTappedId(null);
+            setPressedButton(null);
+            onIdSelect(null)
+            Keyboard.dismiss();
+        }
+
+        const handleLongPress = (id) => {
+            Alert.alert(
+              'Confirmation',
+              'Are you sure you want to delete this count?',
+              [
+                {
+                  text: 'No',
+                  onPress: () => console.log('No Pressed'),
+                  style: 'cancel',
+                },
+                { text: 'Yes', onPress: () => handleDelete(id) },
+              ],
+              { cancelable: false }
+            );
+          };
+
+          const handleDelete = async (id) => {
+            try {
+              await deleteItem(id);
+              fetchItems(); // Refresh the items after deletion
+              console.log('Item deleted successfully');
+            } catch (error) {
+              console.error(`Error deleting item:`, error);
+            }
+          };
+        
             
         return(
-            
+            <TouchableWithoutFeedback onPress={handleOutsidePress}>
             <View style={styles.sectionContainer}>
                 {datatofetch.length === 0 ? (
                 <Text>Loading....</Text>
@@ -88,6 +122,8 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch,fetchItems}) => {
                         key={post._id}
                         style={[styles.button, pressedButton === post._id && styles.buttonPressed]}
                         onPress={() => handleButtonPress(post)}
+                        onLongPress={ () => handleLongPress(post._id)}
+                        delayLongPress={800}
                     >
                         <Text style={styles.text}>#{post._id.slice(-2)}</Text>
                     </TouchableOpacity>
@@ -95,6 +131,7 @@ const Num = ({ datos,onIdSelect,selectedId,datatofetch,fetchItems}) => {
             )}
                 <Popup isVisible={isPopupVisible} onClose={handleClosePopup} popupData={popupData} id={idData} cuenta={cuentaData} wholId={wholId} fetchItems={fetchItems}></Popup>
             </View>
+            </TouchableWithoutFeedback>
         )
 
 }
