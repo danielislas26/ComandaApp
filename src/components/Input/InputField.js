@@ -1,5 +1,5 @@
 import React, { useState,useEffect} from "react";
-import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList} from "react-native";
+import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList, TouchableOpacity} from "react-native";
 import { addItems, updateItem,createItem } from '../../api'
 
 
@@ -73,7 +73,7 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
                     onChangeText={handleChange}
                     
                    />
-                   <Button style={styles.button} title="Submit" onPress={handleSubmit}></Button>
+                   <TouchableOpacity style={styles.button} title="Submit" onPress={handleSubmit}><Text style={styles.buttonText}>Submit</Text></TouchableOpacity>
                </SafeAreaView>
                <View style={styles.container}>
     
@@ -105,22 +105,28 @@ const styles = StyleSheet.create({
         height: 85,
         marginTop: 55,
         marginBottom: 20,
-        borderWidth: 1,
+        borderWidth: 3,
         padding: 10,
         backgroundColor: '#FEF7BA',
         
     },
 
     button:{
+        
+        alignItems: 'center',
         justifyContent: 'center',
-        width: '25%',
-        height: 50,
-        marginLeft :15,
+        width: '35%',
+        height: 60,
         backgroundColor: '#000000',
         borderRadius: 5,
-        marginBottom: 15
+        marginBottom: 15,
+        
         
     },
+    buttonText:{
+        fontSize: 25,
+        color: '#fff'
+    }
 });
 
 export default Input;

@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@types/react": "~18.2.14",
+    "react-native-asset": "^2.1.1",
     "typescript": "^5.4.5"
   },
   "private": true

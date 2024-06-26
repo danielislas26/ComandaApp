@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Input from './Input/InputField';
 import { Notas } from './Notes/Container';
 import { getItems, addItems } from '../api';
@@ -32,6 +32,7 @@ const ParentComponent = () => {
         <View>
             <Input onInputChange={handleInputChange} selectedId={selectedId} fetchItems={fetchItems}/>
             <Notas onIdSelect={handleIdSelect} datos={sharedData} datatofetch={data} fetchItems={fetchItems}/>
+        
         </View>
     );
 };

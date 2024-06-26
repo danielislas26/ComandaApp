@@ -1,31 +1,12 @@
 import React, { useState,useEffect} from "react";
-import { Text,SafeAreaView, View, StyleSheet,ScrollView, TouchableOpacity,TouchableWithoutFeedback,Modal} from "react-native";
-import { total,TotalCalculator,OrderTotalCalculator,spliter } from "../Functions";
+import { Text, View, StyleSheet,ScrollView, TouchableOpacity,TouchableWithoutFeedback,Modal} from "react-native";
+import {OrderTotalCalculator,spliter } from "../Functions";
 
 
 
-const MyComponent = (data) => {
-    
-    TotalCalculator(data)
-    total(data)
-    const linea = data
-   // console.log(`esto es ${typeof data} que es "${data}"`)
-    const regex = /\b\d+[a-zA-Z]{3}\b/;
-  
-    const countOccurrences = (str) => {
-        const matches = str.match(regex);
-        return matches ? matches.length : 0;
-      };
-  
-    
-      const occurrences = countOccurrences(linea);
-     // console.log('Total occurrences:', occurrences);
-      // You can set the count to state or perform other actions with it
-    
 
-    };
 
-    const Popup = ({ isVisible, onClose, popupData, id, cuenta, wholId,fetchItems }) => {
+    const Popup = ({ isVisible, onClose, id, cuenta, wholId,fetchItems }) => {
         const [cuentaArray, setCuentaArray] = useState(cuenta || []);
       
         useEffect(() => {
@@ -53,7 +34,7 @@ const MyComponent = (data) => {
                     <TouchableOpacity activeOpacity={1}>
                       <View style={styles.viewScroll}>
                         {cuentaArray.map((Renglon, idx) => (
-                          <Text key={idx}>*{Renglon}</Text>
+                          <Text key={idx} style={styles.Renglon}>-  {Renglon}</Text>
                         ))}
                         <ScrollView>
                           {spliter(cuentaArray, wholId, cuentaArray, setCuentaArray,fetchItems)}
@@ -90,6 +71,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingLeft: 25,
         paddingRight: 25,
+        shadowOffset: { width: 0, height: 2, }, 
+        
+        
+    },
+    Renglon:{
+      color: '#6f4e22'
     },
     TotalText:{
         fontSize: 28
@@ -99,12 +86,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         height: 65,
-        backgroundColor: '#D22E2E'
+        backgroundColor: 'gold',
+        
     },
     titulo:{
         fontSize: 24,
         fontWeight: 'bold',
-        color: 'white'
+        color: 'black'
     },
     background:{
         flex:1,
@@ -113,12 +101,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.5)'
     },
-    Scroll:{
-        
-        backgroundColor: 'white'
-    },
     viewScroll:{
-        padding:10
+        padding:10,
+        backgroundColor: '#fff7c2'
     },
     BlockContainer:{
         flexDirection: 'row',
@@ -162,7 +147,6 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems:'center',
         justifyContent: 'center',
-        backgroundColor: '#70736A'
     },
     ButtonText:{
         fontSize: 45,
@@ -171,4 +155,4 @@ const styles = StyleSheet.create({
 
   });
 
-export {Popup,MyComponent};
+export {Popup};

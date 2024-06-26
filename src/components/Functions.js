@@ -1,9 +1,9 @@
 import React,{useState,useEffect} from "react";
-import { View,Text,StyleSheet,TouchableOpacity, YellowBox } from "react-native"
+import { View,Text,StyleSheet,TouchableOpacity, YellowBox,Alert } from "react-native"
 import { menu } from "./platillos";
 import { Adder,Reducer } from "./Notes/AdderReducer";
-import { updateCuenta, updateItem } from "../api";
-import axios from "axios";
+import { updateCuenta } from "../api";
+
 
 const total = (order) =>{
     
@@ -81,12 +81,24 @@ function OrderTotalCalculator( orders,wholId,fetchItems ) {
 
 const handleUpdateButtonClick = async () => {
   try {
-    await updateCuenta(wholId, orders,fetchItems);
-    console.log('Updated successfully');
+      await updateCuenta(wholId, orders, fetchItems);
+      console.log('Updated successfully');
+      Alert.alert(
+          'Success',
+          'Cuenta updated successfully!',
+          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+          { cancelable: false }
+      );
   } catch (error) {
-    console.error('Error updating:', error);
+      console.error('Error updating:', error);
+      Alert.alert(
+          'Error',
+          'An error occurred while updating the cuenta.',
+          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+          { cancelable: false }
+      );
   }
-}
+};
 
  /* const UpdateCuenta =(modifiedCuenta,id) => {
     console.log(id,modifiedCuenta)
@@ -181,10 +193,12 @@ Block:{
   height: 120,
   marginTop: 5,
   marginBottom: 10,
-  borderBlockColor: '#D9D9D9',
-  borderBottomWidth:2
+  borderStyle: 'dotted',
+  borderBlockColor: '#8C6723',
+  borderBottomWidth:4
 },
 Plato:{
+  color: '#6F4E22',
   fontSize:30,
   fontWeight: '700'
 },
@@ -198,12 +212,14 @@ Button:{
   height: 50,
   alignItems:'center',
   justifyContent: 'center',
-  backgroundColor: '#70736A'
+  backgroundColor: '#6f4e22'
 },
 ButtonText:{
+  color: '#fff6d3',
   fontSize: 45,
 },
 price:{
+  color:'#6F4E22',
   fontSize:25,
   fontWeight: '500'
 },
@@ -213,7 +229,7 @@ priceContainer:{
 UpdateButton:{
   width: 120,
   height: '75%',
-  backgroundColor: '#00b4d8',
+  backgroundColor: 'black',
   flexDirection:'row',
   justifyContent: 'center',
   alignItems: 'center',
