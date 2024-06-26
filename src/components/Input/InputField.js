@@ -1,5 +1,5 @@
-import React, { useState,useEffect} from "react";
-import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions,Button,FlatList, TouchableOpacity} from "react-native";
+import React, { useState} from "react";
+import { Text,SafeAreaView, View, StyleSheet,TextInput,Dimensions, TouchableOpacity} from "react-native";
 import { addItems, updateItem,createItem } from '../../api'
 
 
@@ -12,21 +12,6 @@ const height = (Dimensions.get('window').height / rows) - (marginVertical * (row
 
 
 const Input = ({ onInputChange, selectedId, fetchItems }) => {
-    const [items, setItems] = useState([])
-    const [orders, setOrders] = useState('');
-    const [value, setValue] = useState('')
-
-
-
-    const handleAddItem = async () => {
-        if ( orders && value) {
-            const newItem = { orders, value: Number(value) };
-            await addItems(newItem);
-            fetchItems();
-            setItems('');
-            setValue('')
-        }
-    };
 
     const [inputValue, setInputValue] = useState('');
 
@@ -68,6 +53,7 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
                <SafeAreaView style={styles.view}>
                    <TextInput
                     style={styles.input}
+                    multiline={true}
                     placeholder="platillos"
                     value={inputValue}
                     onChangeText={handleChange}
@@ -125,7 +111,8 @@ const styles = StyleSheet.create({
     },
     buttonText:{
         fontSize: 25,
-        color: '#fff'
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });
 

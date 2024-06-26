@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+
 const menu = [
   { name: 'tacos', foods: ["cos", "mac", "pan", "esp","pez","sur","cam"], price: 30 },
   { name: 'kilos', foods: ["kcos", "kmac", "kpan", "kesp","kpez","ksur","kcam"], price: 520 },

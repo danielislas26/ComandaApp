@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import Input from './Input/InputField';
 import { Notas } from './Notes/Container';
-import { getItems, addItems } from '../api';
+import { getItems } from '../api';
 
 
 const ParentComponent = () => {
@@ -15,7 +15,6 @@ const ParentComponent = () => {
     };
 
     const handleIdSelect = (id) => {
-        console.log('Selected ID:',id)
         setSelectedId(id);
     };
 

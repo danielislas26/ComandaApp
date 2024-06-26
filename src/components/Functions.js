@@ -1,46 +1,9 @@
-import React,{useState,useEffect} from "react";
-import { View,Text,StyleSheet,TouchableOpacity, YellowBox,Alert } from "react-native"
+
+import { View,Text,StyleSheet,TouchableOpacity,Alert } from "react-native"
 import { menu } from "./platillos";
 import { Adder,Reducer } from "./Notes/AdderReducer";
 import { updateCuenta } from "../api";
 
-
-const total = (order) =>{
-    
-    const selectedFoods = order.split(',');
-    let totalPrice = 0;
-
-    selectedFoods.forEach(food => {
-      menu.forEach(meal => {
-        
-        if (meal.foods.includes(food)) {
-          totalPrice += meal.price;
-        }
-      });
-    });
-}
-
-
-
-function TotalCalculator( input ) {
-  const calculateTotal = (input) => {
-  
-      let itemstoString = '' + input;
-      const items = itemstoString.split(',');
-      let total = 0;
-
-      items.forEach(item => {
-          const [quantity, food] = item.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
-          const menuItem = menu.find(menuItem => menuItem.foods.includes(food));
-          if (menuItem) {
-              total += parseInt(quantity) * menuItem.price;
-          }
-      });
-
-      return total ;
-  };
-
-}
 
 function OrderTotalCalculator( orders,wholId,fetchItems ) {
   let arr = [];
@@ -70,21 +33,13 @@ function OrderTotalCalculator( orders,wholId,fetchItems ) {
   
   }
 
-/*const handleButtonClick = async () => {
-  try {
-    await updateCuenta(wholId, newCuenta);
-    console.log('Updated successfully')
-  } catch (error) {
-    console.error('Error updating:', error);
-  }
-}*/
 
 const handleUpdateButtonClick = async () => {
   try {
       await updateCuenta(wholId, orders, fetchItems);
       console.log('Updated successfully');
       Alert.alert(
-          'Success',
+          'Success!',
           'Cuenta updated successfully!',
           [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
           { cancelable: false }
@@ -100,9 +55,6 @@ const handleUpdateButtonClick = async () => {
   }
 };
 
- /* const UpdateCuenta =(modifiedCuenta,id) => {
-    console.log(id,modifiedCuenta)
-  }*/
   
   return (
     <View style={styles.TotalButtonContainer}>
@@ -112,7 +64,7 @@ const handleUpdateButtonClick = async () => {
   );
 }
 
-function spliter(data, wholId, cuentaArray, setCuentaArray, fetchItems) {
+function spliter(data, cuentaArray, setCuentaArray) {
   const conteo = [
     { dish: 'tacos', quantity: 0, totalPrice: 0 },
     { dish: 'kilos', quantity: 0, totalPrice: 0 },
@@ -126,7 +78,6 @@ function spliter(data, wholId, cuentaArray, setCuentaArray, fetchItems) {
   ];
 
   if (data === "") {
-    console.log("ok");
   } else {
     const ordersToArray = data.flatMap(item => item.split(',')); // set an array with the strings split them by ','
     ordersToArray.forEach(order => {
@@ -156,8 +107,8 @@ function spliter(data, wholId, cuentaArray, setCuentaArray, fetchItems) {
                 <View style={styles.BlockContainer}>
                   <View style={styles.priceContainer}><Text style={styles.price}>${item.totalPrice}</Text></View>
                   <View style={styles.BlockButtons}>
-                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Reducer(wholId, item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>-</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Adder(wholId, item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>+</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Reducer( item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>-</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Adder( item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>+</Text></TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -250,4 +201,4 @@ TextButton:{
 
 })
 
-export{ total,TotalCalculator,OrderTotalCalculator,spliter};
+export{ OrderTotalCalculator,spliter};

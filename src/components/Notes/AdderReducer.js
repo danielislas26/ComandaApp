@@ -1,15 +1,14 @@
 import { menu } from "../platillos";
 
-const Adder = (cuentaId, dish, cuentaArray) => {
+const Adder = ( dish, cuentaArray) => {
   let Arr = [...cuentaArray]; // Copy the array to avoid mutating the original array
-  console.log(dish);
 
   let dishFound = false;
 
   for (let i = Arr.length - 1; i >= 0; i--) {
     let order = Arr[i].split(",");
     for (let j = 0; j < order.length; j++) {
-      const [quantityInt, food] = order[j].split(/(?<=\d)(?=[a-zA-Z])/);
+      
       if (menu.find(menuItem => menuItem.name === dish)) {
         let str = menu.find(menuItem => menuItem.name === dish);
         Arr.push(`1${str.foods[0]}`);
@@ -20,13 +19,11 @@ const Adder = (cuentaId, dish, cuentaArray) => {
     if (dishFound) break;
   }
   Arr = Arr.filter(order => order.trim() !== "");
-  console.log(Arr);
   return Arr;
 };
 
-const Reducer = (cuentaId, dish, cuentaArray) => {
+const Reducer = ( dish, cuentaArray) => {
   let Arr = [...cuentaArray]; // Copy the array to avoid mutating the original array
-  console.log(dish);
 
   let dishFound = false;
 
@@ -51,7 +48,6 @@ const Reducer = (cuentaId, dish, cuentaArray) => {
   }
 
   Arr = Arr.filter(order => order.trim() !== "");
-  console.log(Arr);
   return Arr;
 };
 

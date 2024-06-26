@@ -10,19 +10,20 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
+  FlatList
 } from "react-native";
 import { getItems, deleteItem } from "../../api";
 
 const rows = 4;
 const cols = 2;
-const marginHorizontal = 4;
-const marginVertical = 4;
+const marginHorizontal = 8;
+const marginVertical = 8;
 const width =
   Dimensions.get("window").width / cols - marginHorizontal * (cols + 1);
 const height =
   Dimensions.get("window").height / rows - marginVertical * (rows + 1);
 
-const Num = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
+const Num = ({  onIdSelect,  datatofetch, fetchItems }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -87,6 +88,21 @@ const Num = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
     Keyboard.dismiss();
   };
 
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      key={item._id}
+      style={[
+        styles.button,
+        pressedButton === item._id && styles.buttonPressed,
+      ]}
+      onPress={() => handleButtonPress(item)}
+      onLongPress={() => handleLongPress(item._id)}
+      delayLongPress={800}
+    >
+      <Text style={styles.text}>#{item._id.slice(-2)}</Text>
+    </TouchableOpacity>
+  );
+
   const handleLongPress = (id) => {
     Alert.alert(
       "Confirmation",
@@ -115,28 +131,21 @@ const Num = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
 
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
-      <View style={styles.sectionContainer}>
+      <View style={[ styles.sectionContainer, datatofetch.length === 0 ? styles.sectionContainerEmpty : styles.sectionContainerFull ]}>
         {loading ? (
           <Text>Loading...</Text>
         ) : error ? (
           <Text>{error}</Text>
         ) : datatofetch.length === 0 ? (
-          <Text>There's no cuentas saved yet.</Text>
+          <Text style={styles.noCountsText}>There's no cuentas saved yet...</Text>
         ) : (
-          datatofetch.map((post) => (
-            <TouchableOpacity
-              key={post._id}
-              style={[
-                styles.button,
-                pressedButton === post._id && styles.buttonPressed,
-              ]}
-              onPress={() => handleButtonPress(post)}
-              onLongPress={() => handleLongPress(post._id)}
-              delayLongPress={800}
-            >
-              <Text style={styles.text}>#{post._id.slice(-2)}</Text>
-            </TouchableOpacity>
-          ))
+          <FlatList
+            data={datatofetch}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+            numColumns={cols}
+            contentContainerStyle={styles.flatListContent}
+          />
         )}
         <Popup
           isVisible={isPopupVisible}
@@ -155,7 +164,7 @@ const Num = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
 const Notas = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
   return (
     <View style={styles.containerNotas}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      
         <Num
           datos={datos}
           onIdSelect={onIdSelect}
@@ -163,14 +172,19 @@ const Notas = ({ datos, onIdSelect, selectedId, datatofetch, fetchItems }) => {
           datatofetch={datatofetch}
           fetchItems={fetchItems}
         ></Num>
-      </ScrollView>
+      
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  flatListContent: {
+    
+    justifyContent: "center",
+    alignItems: "center",
+  },
   containerNotas: {
-    height: "70%",
+    height: 250,
   },
   container: {
     flex: 1,
@@ -180,16 +194,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  scrollContainer: {
-    flex: 1,
-    width: "100%",
-    height: "75%",
+
+  noCountsText:{
+  
+    fontSize: 20,
+    fontWeight: 'bold',
+    
+  },
+  containerNotas:{
+    height: '66.5%',
+    backgroundColor:'white'
   },
   sectionContainer: {
+    
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
+  },
+  sectionContainerEmpty:{
+  marginTop: 15,  
+  backgroundColor: 'white'
+  },
+  sectionContainerFull:{
+  backgroundColor: '#F7F9F4'
   },
   button: {
     marginTop: marginVertical,

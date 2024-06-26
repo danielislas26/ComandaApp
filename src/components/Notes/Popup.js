@@ -2,10 +2,6 @@ import React, { useState,useEffect} from "react";
 import { Text, View, StyleSheet,ScrollView, TouchableOpacity,TouchableWithoutFeedback,Modal} from "react-native";
 import {OrderTotalCalculator,spliter } from "../Functions";
 
-
-
-
-
     const Popup = ({ isVisible, onClose, id, cuenta, wholId,fetchItems }) => {
         const [cuentaArray, setCuentaArray] = useState(cuenta || []);
       
@@ -37,7 +33,7 @@ import {OrderTotalCalculator,spliter } from "../Functions";
                           <Text key={idx} style={styles.Renglon}>-  {Renglon}</Text>
                         ))}
                         <ScrollView>
-                          {spliter(cuentaArray, wholId, cuentaArray, setCuentaArray,fetchItems)}
+                          {spliter(cuentaArray, cuentaArray, setCuentaArray)}
                         </ScrollView>
                       </View>
                     </TouchableOpacity>
