@@ -5,67 +5,49 @@ import { Adder,Reducer } from "./Notes/AdderReducer";
 import { updateCuenta } from "../api";
 
 
-function OrderTotalCalculator( orders,wholId,fetchItems ) {
-  let arr = [];
-  for (let key in orders ) {
-    arr.push(orders[key])
-  }
-  //console.log(`esto es ${typeof arr} que es "${arr}"`)
+function OrderTotalCalculator({ orders, wholId, fetchItems, isModified }) {
   const calculateTotal = (order) => {
-      const items = order.split(',');
-      let total = 0;
+    const items = order.match(/\d+[a-zA-Z]+/g);
+    let total = 0;
+    items.forEach(item => {
+      const [quantity, food] = item.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
+      const menuItem = menu.find(menuItem => menuItem.foods.includes(food));
+      if (menuItem) {
+        total += parseInt(quantity) * menuItem.price;
+      }
+    });
 
-      items.forEach(item => {
-          const [quantity, food] = item.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
-          const menuItem = menu.find(menuItem => menuItem.foods.includes(food));
-          if (menuItem) {
-              total += parseInt(quantity) * menuItem.price;
-          }
-      });
-
-      return total;
+    return total;
   };
 
-  let totalCost = 0;
-  
-  if (orders !== "") {
-    totalCost = orders.reduce((acc, order) => acc + calculateTotal(order), 0);
-  
-  }
+  const totalCost = orders.reduce((acc, order) => acc + calculateTotal(order), 0);
 
-
-const handleUpdateButtonClick = async () => {
-  try {
+  const handleUpdateButtonClick = async () => {
+    try {
       await updateCuenta(wholId, orders, fetchItems);
-      console.log('Updated successfully');
-      Alert.alert(
-          'Success!',
-          'Cuenta updated successfully!',
-          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-          { cancelable: false }
-      );
-  } catch (error) {
-      console.error('Error updating:', error);
-      Alert.alert(
-          'Error',
-          'An error occurred while updating the cuenta.',
-          [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
-          { cancelable: false }
-      );
-  }
-};
+      Alert.alert('Success!', 'Cuenta updated successfully!', [{ text: 'OK' }], { cancelable: false });
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while updating the cuenta.', [{ text: 'OK' }], { cancelable: false });
+    }
+  };
 
-  
   return (
     <View style={styles.TotalButtonContainer}>
       <Text style={styles.TotalText}>{totalCost}</Text>
-      <TouchableOpacity style={styles.UpdateButton} onPress={handleUpdateButtonClick}><Text style={styles.TextButton}>update</Text></TouchableOpacity>
+      <TouchableOpacity 
+        style={[styles.UpdateButton, { backgroundColor: isModified ? 'black' : 'gray' }]}
+        onPress={handleUpdateButtonClick}
+        disabled={!isModified}
+      >
+        <Text style={styles.TextButton}>Update</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
-function spliter(data, cuentaArray, setCuentaArray) {
+function spliter(data, cuentaArray, setCuentaArray, handleReducer, handleAdder) {
   const conteo = [
+    { dish: 'dorados', quantity: 0, totalPrice: 0 },
     { dish: 'tacos', quantity: 0, totalPrice: 0 },
     { dish: 'kilos', quantity: 0, totalPrice: 0 },
     { dish: 'medios', quantity: 0, totalPrice: 0 },
@@ -77,23 +59,20 @@ function spliter(data, cuentaArray, setCuentaArray) {
     { dish: 'jugos', quantity: 0, totalPrice: 0 },
   ];
 
-  if (data === "") {
-  } else {
-    const ordersToArray = data.flatMap(item => item.split(',')); // set an array with the strings split them by ','
+  if (data !== "") {
+    const ordersToArray = data.flatMap(item => item.match(/\d+[a-zA-Z]+/g));
     ordersToArray.forEach(order => {
-      const [quantityInt, food] = order.split(/(?<=\d)(?=[a-zA-Z])/); // Split quantity and food
-      const menuItem = menu.find(menuItem => menuItem.foods.includes(food)); // Creates the let menuItem and if it's find the food in the menu foods set the value
+      const [quantityInt, food] = order.split(/(?<=\d)(?=[a-zA-Z])/);
+      const menuItem = menu.find(menuItem => menuItem.foods.includes(food));
       
       if (menuItem) {
         const index = conteo.findIndex(item => item.dish === menuItem.name);
         if (index !== -1) {
-          conteo[index].quantity += parseInt(quantityInt); 
+          conteo[index].quantity += parseInt(quantityInt);
           conteo[index].totalPrice += parseInt(quantityInt) * menuItem.price;
         }
       }
     });
-
-    
 
     return (
       <View>
@@ -102,20 +81,24 @@ function spliter(data, cuentaArray, setCuentaArray) {
             return (
               <View style={styles.Block} key={item.dish}>
                 <View style={styles.PlatoContainer}>
-                  <Text style={styles.Plato}>{item.quantity} </Text><Text style={styles.Plato}>{item.dish}</Text>
+                  <Text style={styles.Plato}>{item.quantity} </Text>
+                  <Text style={styles.Plato}>{item.dish}</Text>
                 </View>
                 <View style={styles.BlockContainer}>
                   <View style={styles.priceContainer}><Text style={styles.price}>${item.totalPrice}</Text></View>
                   <View style={styles.BlockButtons}>
-                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Reducer( item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>-</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.Button} onPress={() => { setCuentaArray(Adder( item.dish, cuentaArray)); }}><Text style={styles.ButtonText}>+</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.Button} onPress={() => handleReducer(item.dish)}>
+                      <Text style={styles.ButtonText}>-</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.Button} onPress={() => handleAdder(item.dish)}>
+                      <Text style={styles.ButtonText}>+</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
             );
-          } else {
-            return null; // Don't render anything for dishes with quantity 0
           }
+          return null; 
         })}
       </View>
     );

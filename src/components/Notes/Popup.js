@@ -1,54 +1,77 @@
 import React, { useState,useEffect} from "react";
 import { Text, View, StyleSheet,ScrollView, TouchableOpacity,TouchableWithoutFeedback,Modal} from "react-native";
 import {OrderTotalCalculator,spliter } from "../Functions";
+import { Adder,Reducer } from "./AdderReducer";
+const Popup = ({ isVisible, onClose, id, cuenta, wholId, fetchItems }) => {
+  const [cuentaArray, setCuentaArray] = useState(cuenta || []);
+  const [isModified, setIsModified] = useState(false);
 
-    const Popup = ({ isVisible, onClose, id, cuenta, wholId,fetchItems }) => {
-        const [cuentaArray, setCuentaArray] = useState(cuenta || []);
-      
-        useEffect(() => {
-          setCuentaArray(cuenta || []);
-        }, [cuenta]);
-      
-        return (
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={isVisible}
-            onRequestClose={() => onClose()}
-          >
-            <TouchableOpacity 
-              style={styles.background}
-              activeOpacity={1}
-              onPress={() => onClose()}
-            >
-              <TouchableWithoutFeedback>
-                <View style={styles.PopupContainer}>
-                  <View style={styles.encabezadoContainer}>
-                    <Text style={styles.titulo}>Cuenta #{id}</Text>
-                  </View>
-                  <ScrollView style={styles.Scroll}>
-                    <TouchableOpacity activeOpacity={1}>
-                      <View style={styles.viewScroll}>
-                        {cuentaArray.map((Renglon, idx) => (
-                          <Text key={idx} style={styles.Renglon}>-  {Renglon}</Text>
-                        ))}
-                        <ScrollView>
-                          {spliter(cuentaArray, cuentaArray, setCuentaArray)}
-                        </ScrollView>
-                      </View>
-                    </TouchableOpacity>
+  useEffect(() => {
+    setCuentaArray(cuenta || []);
+    setIsModified(false); // Reset modification state when cuenta changes
+  }, [cuenta]);
+
+  const handleReducer = (dish) => {
+    setCuentaArray(prevArray => {
+      const newArray = Reducer(dish, prevArray);
+      setIsModified(true);
+      return newArray;
+    });
+  };
+
+  const handleAdder = (dish) => {
+    setCuentaArray(prevArray => {
+      const newArray = Adder(dish, prevArray);
+      setIsModified(true);
+      return newArray;
+    });
+  };
+
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={() => onClose()}
+    >
+      <TouchableOpacity 
+        style={styles.background}
+        activeOpacity={1}
+        onPress={() => onClose()}
+      >
+        <TouchableWithoutFeedback>
+          <View style={styles.PopupContainer}>
+            <View style={styles.encabezadoContainer}>
+              <Text style={styles.titulo}>Cuenta #{id}</Text>
+            </View>
+            <ScrollView style={styles.Scroll}>
+              <TouchableOpacity activeOpacity={1}>
+                <View style={styles.viewScroll}>
+                  {cuentaArray.map((Renglon, idx) => (
+                    <Text key={idx} style={styles.Renglon}>-  {Renglon}</Text>
+                  ))}
+                  <ScrollView>
+                    {spliter(cuentaArray, cuentaArray, setCuentaArray, handleReducer, handleAdder)}
                   </ScrollView>
-                  <View style={styles.TotalContainer}>
-                    <Text style={styles.TotalText}>Total </Text>
-                    <Text style={styles.TotalText}>$</Text>
-                    {OrderTotalCalculator(cuentaArray,wholId,fetchItems)}
-                  </View>
                 </View>
-              </TouchableWithoutFeedback>
-            </TouchableOpacity>
-          </Modal>
-        );
-      };
+              </TouchableOpacity>
+            </ScrollView>
+            <View style={styles.TotalContainer}>
+              <Text style={styles.TotalText}>Total </Text>
+              <Text style={styles.TotalText}>$</Text>
+              <OrderTotalCalculator 
+                orders={cuentaArray} 
+                wholId={wholId} 
+                fetchItems={fetchItems} 
+                isModified={isModified}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </TouchableOpacity>
+    </Modal>
+  );
+};
       
 const styles = StyleSheet.create({
     popupBackground:{

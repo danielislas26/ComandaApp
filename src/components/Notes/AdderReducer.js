@@ -22,14 +22,12 @@ const Adder = ( dish, cuentaArray) => {
   return Arr;
 };
 
-const Reducer = ( dish, cuentaArray) => {
+const Reducer = (dish, cuentaArray) => {
   let Arr = [...cuentaArray]; // Copy the array to avoid mutating the original array
-
-  let dishFound = false;
 
   for (let i = Arr.length - 1; i >= 0; i--) {
     let order = Arr[i].split(",");
-    for (let j = 0; j < order.length; j++) {
+    for (let j = order.length - 1; j >= 0; j--) { // Iterate from last to first
       const [quantityInt, food] = order[j].split(/(?<=\d)(?=[a-zA-Z])/);
       if (menu.find((menuItem) => menuItem.foods.includes(food) && menuItem.name === dish)) {
         let newQuantity = parseInt(quantityInt) - 1;
@@ -40,15 +38,13 @@ const Reducer = ( dish, cuentaArray) => {
         }
 
         Arr[i] = order.join(",");
-        dishFound = true;
-        break;
+        // Exit both loops after updating the last occurrence of the dish
+        return Arr.filter(order => order.trim() !== "");
       }
     }
-    if (dishFound) break;
   }
 
-  Arr = Arr.filter(order => order.trim() !== "");
-  return Arr;
+  return Arr.filter(order => order.trim() !== "");
 };
 
 export { Adder, Reducer };
