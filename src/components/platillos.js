@@ -1,5 +1,6 @@
 
 const menu = [
+  { name: 'dorados', foods: ["dor"], price: 20 },
   { name: 'tacos', foods: ["cos", "mac", "pan", "esp","pez","sur","cam"], price: 30 },
   { name: 'kilos', foods: ["kcos", "kmac", "kpan", "kesp","kpez","ksur","kcam"], price: 520 },
   { name: 'medios', foods: ["mcos", "mmac", "mpan", "mesp","mpez","msur","mcam"], price: 260 },
