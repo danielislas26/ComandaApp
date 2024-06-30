@@ -47,6 +47,8 @@ function OrderTotalCalculator({ orders, wholId, fetchItems, isModified }) {
 
 function spliter(data, cuentaArray, setCuentaArray, handleReducer, handleAdder) {
   const conteo = [
+    { dish: 'pesos', quantity: 0, totalPrice: 0},
+    { dish: 'gramos', quantity: 0, totalPrice: 0 },
     { dish: 'dorados', quantity: 0, totalPrice: 0 },
     { dish: 'tacos', quantity: 0, totalPrice: 0 },
     { dish: 'kilos', quantity: 0, totalPrice: 0 },
