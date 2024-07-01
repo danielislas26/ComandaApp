@@ -52,7 +52,7 @@ const Input = ({ onInputChange, selectedId, fetchItems }) => {
             console.error(`Error updating item:`, error);
           }
         } else {
-          console.error('input value is empty');
+            Alert.alert('Input Error', 'Please enter a value before submitting.');
         }
       };
     
