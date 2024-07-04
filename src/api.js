@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.192:8686/cuentas';
+const API_URL = 'http://93.188.166.130:8686/cuentas'; //93.188.166.130:8686/cuentas : http://192.168.1.192:8686/cuentas
 
 export const getItems = async () => {
     try {
