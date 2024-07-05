@@ -4,10 +4,12 @@ const API_URL = 'http://93.188.166.130:8686/cuentas'; //93.188.166.130:8686/cuen
 
 export const getItems = async () => {
     try {
+        console.log(`Fetching items from ${API_URL}`);
         const response = await axios.get(API_URL);
+        console.log('Items fetched:', response.data);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching items:`, error);
+        console.error(`Error fetching items:`, error.message);
         throw error;
     }
 };
